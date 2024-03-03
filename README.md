@@ -1,7 +1,7 @@
 <table>
   <tr>
     <!-- Replace 'path_to_your_image.jpg' with the actual path to your image -->
-    <td><img width="100" height="100" src="path_to_your_image.jpg" alt="Manuel J. Sales"></td>
+    <td><img width="100" height="100" src="https://github.com/ManuelJSales/ManuelJSales/issues/1#issue-2165571758" alt="Manuel J. Sales"></td>
     <td>
       <strong>Manuel J. Sales</strong><br>
       <em>Welcome to My Professional Portfolio</em><br><br>
