@@ -45,6 +45,17 @@ My tenure at DU has been a transformative period, allowing me to unearth my pote
 <a name="experience"></a>
 <hr>
 
+### Operations Supervisor at Daniel L. Ritchie Center for Sports & Wellness
+In my role as an Operations Supervisor at the Daniel L. Ritchie Center for Sports & Wellness, I've embraced the challenge of leading and unifying the center's staff to significantly elevate the customer experience for students, members, and guests across all venues. My responsibilities included overseeing seamless shift transitions, which encompassed set-up, changeover, and teardown for parking, venues, support areas, programs, events, and services, thereby ensuring operational excellence. My commitment to maintaining strict adherence to equipment usage protocols underscored my ability to monitor and guarantee tasks were completed accurately and efficiently, in line with established guidelines.
+
+### CFC Service Associate at Daniel L. Ritchie Center for Sports & Wellness
+As a CFC Service Associate at the Daniel L. Ritchie Center for Sports & Wellness, my role was pivotal in providing exceptional customer service, which entailed creating a welcoming environment for all guests through attentive greeting and assistance. My efforts contributed to membership growth and engagement by adeptly handling sign-ups, activity registrations, and swiftly resolving any member account issues. Furthermore, I upheld the highest standards of facility cleanliness and safety, proactively addressing hazards to ensure a safe and enjoyable experience for all guests.
+
+### Fulfillment Associate at Amazon.com LLC
+During my tenure as a Fulfillment Associate at Amazon.com LLC, I leveraged my extensive experience in warehouse operations to organize shipments and expedite the unloading of trucks, significantly contributing to the improvement of shipment processing times. My role was crucial in streamlining various warehouse processes, including inventory management and order fulfillment, which enhanced operational efficiency. I excelled in meeting and exceeding customer demands through the prompt and accurate processing of orders, achieving a personal constant average of approximately 100+ units per hour.
+
+### OMNI Lead Associate at KOHL’S
+As an OMNI Lead Associate at KOHL'S, I spearheaded a team of ten associates in the efficient execution of online orders, achieving approximately one thousand units in orders fulfilled with speed and accuracy per shift. My leadership not only elevated customer satisfaction by implementing Kohl’s customer service strategies but also resulted in positive experiences for customers during the busiest time of the year, thereby increasing positive customer feedback. Demonstrating exceptional problem-solving skills, I identified and rectified critical process bottlenecks, enhancing overall store operational efficiency.
 
 ## Contact Information
 <i>See my [LinkedIn profile.](https://www.linkedin.com/in/manueljsales/)</i>
