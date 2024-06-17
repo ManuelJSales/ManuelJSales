@@ -1,6 +1,10 @@
 # Manuel J. Sales
 
-Hello! I'm Manuel, a Business Information & Analytics major at Daniels College of Business, University of Denver, graduating in June 2024, with a minor in Computer Science. My academic journey has equipped me with a robust blend of technical and analytical skills, including proficiency in Microsoft Office, programming languages like Java and Python, as well as expertise in database management and data visualization tools such as Microsoft SQL Server, Tableau, JMP, and Alteryx. Fluent in English and native in Spanish, I am passionate about utilizing data to uncover insights that drive strategic business decisions. Here in my portfolio, you'll find a showcase of my projects that exemplify my skill set and reflect my commitment to bridging the gap between data analytics and actionable business outcomes. I am eager to connect with professionals and peers alike to explore collaborative opportunities and contribute to meaningful projects.
+Hello! I'm Manuel, a recent graduate from the University of Denver with a major in Business Information & Analytics from the Daniels College of Business and a minor in Computer Science. My academic journey has provided me with a strong blend of technical and analytical skills, including proficiency in Microsoft Office, Java, and Python, as well as expertise in database management and data visualization tools such as Microsoft SQL Server, Tableau, JMP, and Alteryx.
+
+Fluent in English and native in Spanish, I am passionate about leveraging data to uncover insights that drive strategic business decisions. My portfolio showcases a range of projects that highlight my skills and dedication to bridging the gap between data analytics and actionable business outcomes.
+
+I'm eager to connect with professionals and peers to explore collaborative opportunities and contribute to impactful projects. Let's connect and turn data into meaningful insights together!
 
 <a name="top"></a>
 <hr>
