@@ -1,0 +1,638 @@
+# The Impact of Erling Haaland on Manchester City
+
+by Manuel Sales
+
+## Introduction
+
+The goal of this blog post is to look into the impact Erling Haaland has had on Manchester City's performance since his arrival to the club in 2022. Specifically, this is aimed to determined whether Haaland's arrival has significantly influenced the team's performance metrics such as goals scored, expected goals, etc.. Additionally, we will explore the contribution of other positions, particularly midfielders, to the team's success.
+
+## Data Collection
+
+The data was collected from reliable football statistic website fbref.com. The data includes team performance metrics, individual player statistics, and match results for Manchester City for the last 4 seasons.
+
+I first load the necessary packages, 'rvest' for web scraping and 'dplyr' for data manipulation. Once the useful tables were identified, for both the team and the player, and we scrape the data and save it into a .csv file.
+
+```{r shooting-stats, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+# Load required packages
+library(rvest)
+library(dplyr)
+
+# Define the URLs for shooting tables
+urls <- list(
+  "2020-2021" = "https://fbref.com/en/squads/b8fd03ef/2020-2021/matchlogs/all_comps/shooting/Manchester-City-Match-Logs-All-Competitions",
+  "2021-2022" = "https://fbref.com/en/squads/b8fd03ef/2021-2022/matchlogs/all_comps/shooting/Manchester-City-Match-Logs-All-Competitions",
+  "2022-2023" = "https://fbref.com/en/squads/b8fd03ef/2022-2023/matchlogs/all_comps/shooting/Manchester-City-Match-Logs-All-Competitions",
+  "2023-2024" = "https://fbref.com/en/squads/b8fd03ef/2023-2024/matchlogs/all_comps/shooting/Manchester-City-Match-Logs-All-Competitions"
+)
+
+# Function to scrape and save the table
+scrape_and_save <- function(url, season) {
+  # Read the webpage content
+  webpage <- read_html(url)
+  
+  # Extract the table
+  table <- webpage %>%
+    html_node("table.stats_table") %>%
+    html_table()
+  
+  # Set the first row as the header
+  colnames(table) <- table[1, ]
+  table <- table[-1, ]
+  
+  # Convert to a tibble with name repair to handle any issues with column names
+  table <- as_tibble(table, .name_repair = "unique")
+  
+  # Save the table to a CSV file with the season in the filename
+  filename <- paste0("mancity_shooting_", season, ".csv")
+  write.csv(table, filename, row.names = FALSE)
+  
+  # Print a message indicating success
+  print(paste("Saved table for season", season, "to file", filename))
+}
+
+# Loop through each URL and scrape the table
+for (season in names(urls)) {
+  scrape_and_save(urls[[season]], season)
+}
+
+```
+
+```{r haaland-stats, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+# Load required packages
+library(rvest)
+library(dplyr)
+
+# Define the URL for the Shooting table of Erling Haaland
+url <- "https://fbref.com/en/players/1f44ac21/all_comps/Erling-Haaland-Stats---All-Competitions"
+
+# Function to scrape and save the table
+scrape_and_save <- function(url, filename) {
+  # Read the webpage content
+  webpage <- read_html(url)
+  
+  # Extract the Shooting table
+  table <- webpage %>%
+    html_node("table#stats_shooting") %>%
+    html_table()
+  
+  # Set the first row as the header
+  colnames(table) <- table[1, ]
+  table <- table[-1, ]
+  
+  # Convert to a tibble with name repair to handle any issues with column names
+  table <- as_tibble(table, .name_repair = "unique")
+  
+  # Save the table to a CSV file
+  write.csv(table, filename, row.names = FALSE)
+  
+  # Print a message indicating success
+  print(paste("Saved table to file", filename))
+}
+
+# Call the function to scrape and save the Shooting table for Erling Haaland
+scrape_and_save(url, "haaland_shooting_stats.csv")
+
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(readr)
+library(tidyverse)
+```
+
+## Eerling Haaland's Manchester City Stats
+
+```{r}
+
+# Read the data files
+haaland_stats <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Shooting Tables/Haaland Personal Shooting Stats.csv")
+
+haaland_stats
+
+```
+
+```{r}
+# Convert relevant columns to numeric, handle missing values
+convert_to_numeric <- function(df) {
+  df %>%
+    mutate(across(c(Gls, Sh, SoT, xG, Matches), ~ as.numeric(.), .names = "{col}"))
+}
+
+haaland_stats <- convert_to_numeric(haaland_stats)
+
+```
+
+```{r}
+
+# Filter the data for the seasons 2022-2023 and 2023-2024
+haaland_last_two_seasons <- haaland_stats %>%
+  filter(Season %in% c("2022-2023", "2023-2024"))
+
+# Check the filtered data
+head(haaland_last_two_seasons)
+
+# Calculate summary statistics
+haaland_summary <- haaland_last_two_seasons %>%
+  summarise(
+    total_goals = sum(Gls, na.rm = TRUE),
+    total_xG = sum(xG, na.rm = TRUE),
+    total_shots = sum(Sh, na.rm = TRUE),
+    total_shots_on_target = sum(SoT, na.rm = TRUE),
+    total_matches = sum(Matches, na.rm = TRUE),
+    average_goals_per_game = mean(Gls / Matches, na.rm = TRUE),
+    average_xG_per_game = mean(xG / Matches, na.rm = TRUE),
+    average_shots_per_game = mean(Sh / Matches, na.rm = TRUE),
+    average_shots_on_target_per_game = mean(SoT / Matches, na.rm = TRUE)
+  )
+
+# Print the summary
+print(haaland_summary)
+```
+
+From this dataframe, we can see that Haaland has had a total of:
+
+-   An expected goals value of 75.3.
+
+-   90 goals during the two seasons at Manchester City, exceeding his personal xG by 19%.
+
+-   A total of 341 shots, 164 of those being on target.
+
+During his first season, Haaland played for a total of 51 games across all competitions, scoring in almost every game. However, this past season, Erling Haaland played a total of 36 games, less than his first season, due to injury.
+
+## Manchester City Stats 2020-21 Season
+
+```{r}
+
+mancity_2020_2021 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Shooting Tables/mancity_shooting_2020-2021.csv")
+
+mancity_2020_2021
+
+```
+
+## Manchester City Stats 2021-22 Season
+
+```{r}
+
+mancity_2021_2022 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Shooting Tables/mancity_shooting_2021-2022.csv")
+
+mancity_2021_2022
+
+```
+
+## Manchester City Stats 2022-23 Season
+
+```{r}
+
+mancity_2022_2023 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Shooting Tables/mancity_shooting_2022-2023.csv")
+
+mancity_2022_2023
+
+```
+
+## Manchester City Stats 2023-24 Season
+
+```{r}
+mancity_2023_2024 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Shooting Tables/mancity_shooting_2023-2024.csv")
+
+mancity_2023_2024
+```
+
+## Data Cleaning and Type Conversion
+
+We run some script to make sure we convert all character columns in a data frame to numeric and handles missing values. The function transforms character columns to numeric, and then removes temporary columns prefixed with "num\_", and finally replaces any non existent values in the numeric columns ('NA') with zeros. It's applied to all the data frames and ensures all relevant columns in these data frames are numeric and free of missing values so that we can perform analysis.
+
+```{r include=FALSE}
+# Convert relevant columns to numeric, handle missing values
+convert_to_numeric <- function(df) {
+  df %>% 
+    mutate(across(where(is.character), ~ as.numeric(as.character(.)), .names = "num_{col}")) %>% 
+    select(-starts_with("num_")) %>% 
+    mutate(across(where(is.character), ~ as.numeric(as.character(.)), .names = "{col}")) %>%
+    mutate(across(where(is.character), ~ ifelse(is.na(.), 0, .)))
+}
+
+haaland_stats <- convert_to_numeric(haaland_stats)
+mancity_2020_2021 <- convert_to_numeric(mancity_2020_2021)
+mancity_2021_2022 <- convert_to_numeric(mancity_2021_2022)
+mancity_2022_2023 <- convert_to_numeric(mancity_2022_2023)
+mancity_2023_2024 <- convert_to_numeric(mancity_2023_2024)
+
+```
+
+## Manchester City's Performance Before and After Haaland's Arrival
+
+To perform analysis on the before and after of Haaland's arrival, we must combine the data from two seasons before Haaland, and the two seasons he's been a part of the team.
+
+To analyze Haaland's impact, we calculate the key performance metrics for each period (before and after) by summarizing the total goals scored (`total goals`), expected goals (`total_xG`), total shots taken (`total_shots`), total shots on target (`total_shots_on_target`), total team goals (`total_team_goals`), and total goals conceded (`total_goals_against`). Finally, it adds a column `period` to the summary data frame to label it as `pre_haaland_summary`.
+
+```{r}
+
+pre_haaland <- bind_rows(mancity_2020_2021, mancity_2021_2022)
+post_haaland <- bind_rows(mancity_2022_2023, mancity_2023_2024)
+
+```
+
+```{r}
+
+pre_haaland_summary <- pre_haaland %>%
+  summarise(
+    total_goals = sum(Gls, na.rm = TRUE),
+    total_xG = sum(xG, na.rm = TRUE),
+    total_shots = sum(Sh, na.rm = TRUE),
+    total_shots_on_target = sum(SoT, na.rm = TRUE),
+    total_team_goals = sum(GF, na.rm = TRUE),
+    total_goals_against = sum(GA, na.rm = TRUE)
+  ) %>%
+  mutate(period = "Pre Haaland")
+```
+
+We display the results of these calculations by printing out the table we created.
+
+```{r}
+pre_haaland_summary
+```
+
+We see from the output of the calculations that before Haaland's arrival, Manchester City:
+
+-   Had a total of 550 goals scored and/or allowed across all competitions.
+
+-   A total of 206.3 expected goals for the two seasons.
+
+-   A total of 3,936 shots, 1,396 of which were shots on target.
+
+-   The team scored 281 goals for the two seasons, surpassing the total expected goals by 36.2%.
+
+-   The goal difference of the team pre-Haaland was of +189 goals for the two seasons.
+
+Now, we do the same calculations for the team's shooting stats post-Haaland's arrival.
+
+```{r}
+post_haaland_summary <- post_haaland %>%
+  summarise(
+    total_goals = sum(Gls, na.rm = TRUE),
+    total_xG = sum(xG, na.rm = TRUE),
+    total_shots = sum(Sh, na.rm = TRUE),
+    total_shots_on_target = sum(SoT, na.rm = TRUE),
+    total_team_goals = sum(GF, na.rm = TRUE),
+    total_goals_against = sum(GA, na.rm = TRUE)
+  ) %>%
+  mutate(period = "Post Haaland")
+```
+
+```{r}
+post_haaland_summary
+```
+
+We can see from the output that post-Haaland, Manchester City:
+
+-   Has a total goals scored and/or allowed of 574 across all competitions.
+
+-   Has a total expected goals of 210.4 for the seasons.
+
+-   They had 3,920 total shots, 1,492 of those on target.
+
+-   Scored 290 goals, exceeding the total expected goals by 37.83%.
+
+-   The goal difference for the period is of +193, higher than the period pre-Haaland by a difference of 4 goals.
+
+Here is a visual representation of the statistics we just discussed.
+
+```{r}
+combined_summary <- bind_rows(pre_haaland_summary, post_haaland_summary) %>%
+  pivot_longer(cols = -period, names_to = "metric", values_to = "value")
+```
+
+```{r}
+
+ggplot(combined_summary, aes(x = metric, y = value, fill = period)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  facet_wrap(~metric, scales = "free") +
+  labs(title = "Comparison of Performance Metrics Pre and Post Haaland",
+       x = "Metric",
+       y = "Value") +
+  theme_minimal()
+```
+
+## Manchester City's Chances Created Before and After Haaland's Arrival
+
+Soccer shooting metrics are highly dependent in teamwork performance. A cohesive defense and midfield often translates into chances created for the forwards. When a team is defending, the defensive line is responsible to regain possession of the ball. This transition from defense to offense is crucial in chance creation. A defender's job is not only to regain possession of the ball, but to dictate the pace as to which the team will transition to offense. This varies depending on the tactic, and it can go from very aggressive and fast transitions that aim to catch the rival team's defense misplaced (often referred to as a counter attack) to a more conservative approach with slower build-ups focused more on controlling the pace of the game and retaining as much ball possession as possible which can result in more chance creation opportunities.
+
+Manchester City's coach, Pep Guardiola, is known for being very possession-focused, although for the past 7-10 years he has focused on becoming a more hybrid coach, balancing counter attacks with possession-style tactics. His effective hybrid approach has cemented Pep Guardiola as one of the best coaches in the world (and arguably in the history of the game).
+
+It's important to analyze the chances created by the team and compare these to the shooting statistics of the team. This can allow us to see if the team has a lot to do with the shooting and goal performance or if there is a high individual impact by Manchester City's forward. We collect data on chances created for the same seasons as the shooting data, combine them into Pre-Haaland and Post-Haaland periods, and perform analysis on these.
+
+## Chances Created During the 2020-21 Season
+
+```{r}
+mancity_chances_created20_21 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Passing Tables/mancity_change_2020-2021.csv")
+
+mancity_chances_created20_21
+```
+
+## Chances Created During the 2021-22 Season
+
+```{r}
+mancity_chances_created21_22 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Passing Tables/mancity_change_2021-2022.csv")
+
+mancity_chances_created21_22
+```
+
+## Chances Created During the 2022-23 Season
+
+```{r}
+mancity_chances_created22_23 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Passing Tables/mancity_change_2022-2023.csv")
+
+mancity_chances_created22_23
+```
+
+## Chances Created During the 2023-24 Season
+
+```{r}
+mancity_chances_created23_24 <- read_csv("C:/Users/Manuel/OneDrive/Desktop/SportsAnalytics_Project/Manchester City/Manchester City Passing Tables/mancity_change_2023-2024.csv")
+
+mancity_chances_created23_24
+```
+
+Once again, we ensure all our data columns are converted to numerical to be able to perform our analysis.
+
+```{r include=FALSE}
+# Convert relevant columns to numeric
+convert_to_numeric <- function(df) {
+  df %>%
+    mutate(across(where(is.character), ~ as.numeric(as.character(.)), .names = "num_{col}")) %>%
+    select(-starts_with("num_")) %>%
+    mutate(across(where(is.character), ~ as.numeric(as.character(.))))
+}
+
+# Apply the conversion function to each season's data
+mancity_chances_created20_21 <- convert_to_numeric(mancity_chances_created20_21)
+mancity_chances_created21_22 <- convert_to_numeric(mancity_chances_created21_22)
+mancity_chances_created22_23 <- convert_to_numeric(mancity_chances_created22_23)
+mancity_chances_created23_24 <- convert_to_numeric(mancity_chances_created23_24)
+
+```
+
+## Chances Created Pre-Haaland's Arrival
+
+```{r}
+pre_haaland_chances <- bind_rows(mancity_chances_created20_21,mancity_chances_created21_22)
+
+pre_haaland_chances
+```
+
+## Chances Created Post-Haaland's Arrival
+
+```{r}
+# Post-Haaland data (2022-2023, 2023-2024)
+post_haaland_chances <- bind_rows(mancity_chances_created22_23,mancity_chances_created23_24)
+
+post_haaland_chances
+```
+
+## Pre-Haaland Chances Created - Summary
+
+```{r}
+# Summarize pre and post Haaland data
+pre_haaland_chances_summary <- pre_haaland_chances %>%
+  summarise(
+    total_SCA = sum(SCA, na.rm = TRUE),
+    total_GCA = sum(GCA, na.rm = TRUE)
+  ) %>%
+  mutate(period = "Pre Haaland")
+```
+
+```{r}
+pre_haaland_chances_summary
+```
+
+The output of the table indicates the following:
+
+-   total_SCA: This stands for total shot-creating actions. A shot-creating action is an offensive action that directly leads toa shot, such as a pass, dribble, or drawing a foul. The value 5,986 indicates the amount of total shot-creating actions during the two-seasons period before Haaland's arrival at City.
+
+-   total_GCA: This stands for total goal-creating actions. A goal-creating action is an action that ends up in a goal. There were 786 goal creating actions for the two seasons.
+
+Now, we calculated that the total goals scored for this same period was of 281 goals. The reason for the total number of GCAs (786) is significantly higher than the total number of goals scored is that multiple actions can contribute to a single goal. For instance, a goal might result from a sequence of plays involving several key passes and dribbles, each of which is counted as a GCA. This metric provides a more comprehensive view of the team's offensive dynamics, which may highlight how often the team as a collective engages in effective playmaking that lead to goal scoring opportunities.
+
+With this in perspective, we can conclude that 786 goal creating actions lead to 281 goals for the 2020-21 and 2021-22 seasons.
+
+## Post-Haaland Chances Created - Summary
+
+```{r}
+post_haaland_chances_summary <- post_haaland_chances %>%
+  summarise(
+    total_SCA = sum(SCA, na.rm = TRUE),
+    total_GCA = sum(GCA, na.rm = TRUE)
+  ) %>%
+  mutate(period = "Post Haaland")
+```
+
+```{r}
+post_haaland_chances_summary
+```
+
+The output of this table indicates the following:
+
+-   total_SCA: Post-Haaland there were 6,240 shot-creating actions during the period of 2022-23 to 2023-24 seasons.
+
+-   total_GCA: Post-Haaland, there were 884 goal-creating actions during the period.
+
+To recall, post-Haaland, the team scored 290 goals. 884 GCAs were recorded during this period which is an increase of 12% GCAs after Haaland arrived to the club. We can infer from this that the tactics Pep Guardiola has implemented from the midfield up may be aimed to feed Haaland with goal scoring opportunities, highlighting his importance in the team as a striker.
+
+```{r}
+combined_summary <- bind_rows(pre_haaland_chances_summary, post_haaland_chances_summary) %>%
+  pivot_longer(cols = -period, names_to = "metric", values_to = "value")
+```
+
+Here is a comparison of all the metrics in a visual format.
+
+```{r}
+
+ggplot(combined_summary, aes(x = period, y = value, fill = period)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~metric, scales = "free") +
+  labs(title = "Comparison of Chance Creation Metrics Pre and Post Haaland",
+       x = "Period",
+       y = "Value") +
+  theme_minimal()
+```
+
+## Total Performance Metrics of Manchester City Over Four Seasons (2020-2024)
+
+The table summarizes the performance metrics of Manchester City over four football seasons (2020-2021 to 2023-2024). Each row in the table corresponds to a specific season and presents aggregated statistics related to the team's offensive and defensive performance. Here's an explanation of each column in the table:
+
+```{r}
+mancity_2020_2021$Season <- "2020-2021"
+mancity_2021_2022$Season <- "2021-2022"
+mancity_2022_2023$Season <- "2022-2023"
+mancity_2023_2024$Season <- "2023-2024"
+
+
+all_seasons <- bind_rows(mancity_2020_2021, mancity_2021_2022, mancity_2022_2023, mancity_2023_2024)
+
+# Aggregate performance metrics by season
+seasonal_summary <- all_seasons %>%
+  group_by(Season) %>%
+  summarise(
+    total_goals = sum(Gls, na.rm = TRUE),
+    total_xG = sum(xG, na.rm = TRUE),
+    total_shots = sum(Sh, na.rm = TRUE),
+    total_shots_on_target = sum(SoT, na.rm = TRUE),
+    total_team_goals = sum(GF, na.rm = TRUE),
+    total_goals_against = sum(GA, na.rm = TRUE)
+  )
+
+seasonal_summary
+```
+
+**Metrics include:**
+
+total_goals: The total number of goals scored by the team during the season. total_xG: The total expected goals (xG) for the season. Expected goals is a metric that estimates the number of goals a team should have scored based on the quality of the chances created. total_shots: The total number of shots taken by the team during the season. total_shots_on_target: The total number of shots on target by the team during the season. total_team_goals: The total number of goals scored by the team (this may be the same as total_goals, depending on the context). total_goals_against: The total number of goals conceded by the team during the season.
+
+Here is a detailed Explanation of Each Season:
+
+-   **For the 2020-2021 season:**
+
+    total_goals: 258 total_xG: 91.0 total_shots: 1834 total_shots_on_target: 680 total_team_goals: 131 total_goals_against: 42 This season saw Manchester City scoring 258 goals with an expected goals value of 91.0. The team took 1,834 shots, with 680 of them on target. They scored a total of 131 goals and conceded 42 goals.
+
+-   **For the 2021-2022 season:**
+
+    total_goals: 292 total_xG: 115.3 total_shots: 2102 total_shots_on_target: 716 total_team_goals: 150 total_goals_against: 50 In this season, the team scored 292 goals, with an expected goals value of 115.3. They took 2,102 shots, with 716 on target. The team scored 150 goals and conceded 50 goals.
+
+-   **For the 2022-2023 season:**
+
+    total_goals: 296 total_xG: 105.1 total_shots: 1842 total_shots_on_target: 702 total_team_goals: 151 total_goals_against: 46 During this season, Manchester City scored 296 goals, with an expected goals value of 105.1. They took 1,842 shots, with 702 on target. The team scored 151 goals and conceded 46 goals.
+
+-   **For the 2023-2024 season:**
+
+    total_goals: 278 total_xG: 105.3 total_shots: 2078 total_shots_on_target: 790 total_team_goals: 139 total_goals_against: 51 In the most recent season, the team scored 278 goals, with an expected goals value of 105.3. They took 2,078 shots, with 790 on target. The team scored 139 goals and conceded 51 goals.
+
+```{r}
+seasonal_summary_long <- pivot_longer(seasonal_summary, 
+                                      cols = c(total_goals, total_xG, total_shots, total_shots_on_target, total_team_goals, total_goals_against),
+                                      names_to = "metric", 
+                                      values_to = "value")
+
+plot_metrics_over_time <- function(df) {
+  ggplot(df, aes(x = Season, y = value, group = metric)) +
+    geom_line(color = "blue") +
+    geom_point(color = "red") +
+    facet_wrap(~ metric, scales = "free_y") +
+    labs(title = "Trend of Metrics Over Seasons",
+         x = "Season",
+         y = "Value") +
+    theme_minimal()
+}
+
+plot_metrics_over_time(seasonal_summary_long)
+```
+
+```{r eval=FALSE, include=FALSE}
+p <- plot_metrics_over_time(seasonal_summary_long)
+
+# Save the plot as a PNG file
+ggsave("metrics_over_time.png", plot = p, width = 10, height = 8, dpi = 300)
+```
+
+## Using Linear Regression to Analyze Trends in Performance Metrics Over the Seasons
+
+We use linear regression to analyze the "total_goals", "total_xG", "total_shots", "total_shots_on_target", "total_team_goals", and "total_goals_against" metrics. Each time we use the script, we fit a linear regression model for the specified metric against the season and we output a summary of the model.
+
+```{r}
+
+library(ggcorrplot)
+library(rlang)
+
+# Analyze trends using linear regression
+analyze_trend <- function(df, metric) {
+  metric_col <- sym(metric)
+  formula <- as.formula(paste(metric, "~ as.numeric(as.factor(Season))"))
+  model <- lm(formula, data = df)
+  summary(model)
+}
+```
+
+```{r}
+analyze_trend(seasonal_summary, "total_goals")
+analyze_trend(seasonal_summary, "total_xG")
+analyze_trend(seasonal_summary, "total_shots")
+analyze_trend(seasonal_summary, "total_shots_on_target")
+analyze_trend(seasonal_summary, "total_team_goals")
+analyze_trend(seasonal_summary, "total_goals_against")
+```
+
+## Interpretation of the Results
+
+The model indicates that there is no statistically significant trend in total goals over the seasons (p-value = 0.5187). The adjusted R-squared value is -0.1525, suggesting that the model does not explain the variability in total goals well. The intercept suggests that without considering the season, the average total goals are estimated to be around 265.
+
+Similar interpretations can be made for the other metrics (total_xG, total_shots, etc.). The p-values and R-squared values provide insights into whether there are significant trends and how well the model fits the data. In general, most of the models indicate weak relationships between the metrics and seasons, suggesting that other factors might be influencing these performance metrics.
+
+```{r}
+# Add Season Column
+mancity_chances_created20_21$Season <- "2020-2021"
+mancity_chances_created21_22$Season <- "2021-2022"
+mancity_chances_created22_23$Season <- "2022-2023"
+mancity_chances_created23_24$Season <- "2023-2024"
+
+# Combine all seasons for chances created
+all_chances_created <- bind_rows(mancity_chances_created20_21, mancity_chances_created21_22, mancity_chances_created22_23, mancity_chances_created23_24)
+
+# Aggregate chances created metrics by season
+seasonal_chances_summary <- all_chances_created %>%
+  group_by(Season) %>%
+  summarise(
+    total_SCA = sum(SCA, na.rm = TRUE),
+    total_GCA = sum(GCA, na.rm = TRUE)
+  )
+
+seasonal_chances_summary
+```
+
+```{r}
+# Analyze trends in chance creation using linear regression
+analyze_trend(seasonal_chances_summary, "total_SCA")
+analyze_trend(seasonal_chances_summary, "total_GCA")
+
+```
+
+```{r}
+
+seasonal_chances_long <- pivot_longer(
+  seasonal_chances_summary, 
+  cols = c(total_SCA, total_GCA),
+  names_to = "Metric", 
+  values_to = "Value"
+)
+
+plot_chances_over_time <- function(df) {
+  ggplot(df, aes(x = Season, y = Value, group = Metric)) +
+    geom_line(color = "blue") +
+    geom_point(color = "red") +
+    facet_wrap(~ Metric, scales = "free_y") +
+    labs(title = "Trend of Chance Creation Metrics Over Seasons",
+         x = "Season",
+         y = "Total Actions") +
+    theme_minimal()
+}
+
+plot_chances_over_time(seasonal_chances_long)
+
+```
+
+## Summary of Findings:
+
+For total_SCA, the linear regression model suggests an increasing trend in total_SCA over the seasons, but this trend is not statistically significant. This indicates that while there might be a positive change in shot-creating actions, it cannot be conclusively attributed to the seasons in the given data set.
+
+For total_GCA, the linear regression model suggests a more evident increasing trend in total_GCA over the seasons, with the coefficient being close to significant. This indicates a stronger possibility that goal-creating actions have increased over the seasons, though the trend is not definitively proven by the p-value.
+
+The line plots for total_SCA and total_GCA over the seasons further illustrate these trends. For the total_SCA trend, the plot shows variability with an initial increase, a drop, and then another increase, reflecting the fluctuations in shot-creating actions over the seasons. For the total_GCA Trend, the plot shows a consistent upward trend, suggesting an overall improvement in the team's ability to create goal-scoring opportunities.
+
+## Conclusion
+
+The findings of this analysis suggests that while the acquisition of Haaland has coincided with significant goal-scoring prowess, the overall team dynamics and contributions from other key player positions, particularly in the midfield, have also played crucial roles. The linear regression analysis indicated that the increase in goal creating actions over the seasons were nearly significant, suggesting a positive trend in the team's ability to create goal-scoring opportunities.
+
+The analysis also revealed fluctuations in the total shot-creating actions, with a noticeable dip in the 2021-2022 season, followed by an increase in these actions in the following season. This may be due to player injury, change of tactics, or other factors.
+
+While Erling Haaland's arrival at the club has undoubtedly enhanced Manchester City's offensive capabilities, the team's success is a product of cohesive teamwork and strategic playmaking across all positions. This analysis highlights the importance in soccer of considering both individual talents and overall team dynamics in evaluating sports performance.
+
+Future insights could expand on this work by incorporating more seasons, additional performance metrics, and comparisons with other top players and teams. Overall, we've learned from this analysis that while individual stars can significantly impact a team's performance, the true success of a soccer team lies in its collective effort and strategic execution.
