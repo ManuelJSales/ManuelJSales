@@ -13,7 +13,7 @@ I'm eager to connect with professionals and peers to explore collaborative oppor
 <a name="education"></a>
 ## Education
 ### University of Denver, Daniels College of Business
-Bachelor of Science in Business Administration – Business Information and Analytics, Expected Graduation: June 2024
+Bachelor of Science in Business Administration – Business Information and Analytics, Graduation Date: June 2024
 
 Embarking on my academic journey at the University of Denver, I have been fortunate to be under the tutelage of distinguished professors within the realm of business academia. Their unparalleled guidance has ignited my passion for data analytics, a field where precision meets creativity. I am deeply indebted to these mentors, whose influence has been instrumental in shaping my academic and professional outlook.
 
@@ -64,4 +64,3 @@ As an OMNI Lead Associate at KOHL'S, I spearheaded a team of ten associates in t
 ## Contact Information
 <i>See my [LinkedIn profile.](https://www.linkedin.com/in/manueljsales/)</i>
 <i>Contact me at: manuel.j.sales@outlook.com
-<i>or contact me through my cellphone number: (201) 388-5470
