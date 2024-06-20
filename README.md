@@ -61,6 +61,7 @@ During my tenure as a Fulfillment Associate at Amazon.com LLC, I leveraged my ex
 ### OMNI Lead Associate at KOHL’S
 As an OMNI Lead Associate at KOHL'S, I spearheaded a team of ten associates in the efficient execution of online orders, achieving approximately one thousand units in orders fulfilled with speed and accuracy per shift. My leadership not only elevated customer satisfaction by implementing Kohl’s customer service strategies but also resulted in positive experiences for customers during the busiest time of the year, thereby increasing positive customer feedback. Demonstrating exceptional problem-solving skills, I identified and rectified critical process bottlenecks, enhancing overall store operational efficiency.
 
-## Contact Information
-<i>See my [LinkedIn profile.](https://www.linkedin.com/in/manueljsales/)</i>
-<i>Contact me at: manuel.j.sales@outlook.com
+## Explore My Projects
+Thank you for visiting my portfolio! I am passionate about leveraging data to drive strategic business decisions and am eager to share my work with you. I invite you to explore my projects, where you’ll find some of the work that showcases my skills and dedication.
+
+If you want to get in touch, feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/manueljsales/) for any questions or collaboration opportunities.
